@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from . import config, db
-from users.models import User
+from app.users.models import User
 
 from cassandra.cqlengine.management import sync_table
 
@@ -21,3 +21,8 @@ def on_startup():
 @app.get("/")
 def homepage():
     return {"message": "Hello World"}
+
+
+@app.get("/users")
+def user_list_view():
+    return list(User.objects.all().limit(10))
