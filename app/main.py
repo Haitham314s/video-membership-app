@@ -1,12 +1,15 @@
+import json
 import pathlib
 
 from cassandra.cqlengine.management import sync_table
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from pydantic import ValidationError
 
 from app.users.models import User
 from . import config, db
+from .users.schemas import UserSignupSchema, UserLoginSchema
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent
 TEMPLATE_DIR = BASE_DIR / "templates"
@@ -48,6 +51,10 @@ def login_post_view(
         email: str = Form(...),
         password: str = Form(...)
 ):
+    cleaned_data = UserLoginSchema(
+        email=email,
+        password=password
+    )
     return templates.TemplateResponse("auth/login.html")
 
 
@@ -66,7 +73,33 @@ def signup_post_view(
         password: str = Form(...),
         password_confirm: str = Form(...)
 ):
-    return templates.TemplateResponse("auth/signup.html")
+    data = {}
+    errors = []
+    error_str = ""
+    context = {
+        "request": request,
+        "data": data,
+        "errors": errors,
+    }
+
+    try:
+        cleaned_data = UserSignupSchema(
+            email=email,
+            password=password,
+            password_confirm=password_confirm
+        )
+        data = cleaned_data.dict()
+    except ValidationError as e:
+        error_str = e.json()
+
+    try:
+        errors = json.loads(error_str)
+    except Exception as e:
+        errors = [{"loc": "non_field_error", "msg": "Unknown"}]
+
+    print(cleaned_data.dict())
+
+    return templates.TemplateResponse("auth/signup.html", context)
 
 
 @app.get("/users")
