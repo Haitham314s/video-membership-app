@@ -7,7 +7,7 @@ from fastapi.templating import Jinja2Templates
 
 from app.users.models import User
 from . import config, db, utils
-from .shortcuts import render
+from .shortcuts import render, redirect
 from .users.schemas import UserSignupSchema, UserLoginSchema
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent
@@ -57,9 +57,9 @@ def login_post_view(
         "errors": errors
     }
     if len(errors) > 0:
-        return render(request, "auth/login.html", context, status=400)
+        return render(request, "auth/login.html", context, status_code=400)
 
-    return render(request, "auth/login.html", {"logged_in": True}, cookies=data)
+    return redirect("/", cookies=data)
 
 
 @app.get("/signup", response_class=HTMLResponse)
@@ -87,7 +87,7 @@ def signup_post_view(
     if len(errors) > 0:
         return render(request, "auth/signup.html", context, status_code=400)
 
-    return render(request, "auth/signup.html", context)
+    return redirect("/login")
 
 
 @app.get("/users")
