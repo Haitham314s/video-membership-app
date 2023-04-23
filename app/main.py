@@ -1,15 +1,16 @@
 import pathlib
 
 from cassandra.cqlengine.management import sync_table
-from fastapi import FastAPI, Request, Form, HTTPException
+from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 from app.users.models import User
-from . import config, db, utils
-from .shortcuts import render, redirect
-from .users.schemas import UserSignupSchema, UserLoginSchema
-from .users.decorators import login_required
+from app import config, db, utils
+from app.shortcuts import render, redirect
+from app.users.schemas import UserSignupSchema, UserLoginSchema
+from app.users.decorators import login_required
+from app.handlers import *  # noqa
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent
 TEMPLATE_DIR = BASE_DIR / "templates"
