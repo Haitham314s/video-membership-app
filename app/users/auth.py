@@ -22,7 +22,7 @@ def authenticate(email, password):
 
 def login(user_obj, expires=5):
     return jwt.encode({
-        "user_id": f"{user_obj.id}",
+        "user_id": f"{user_obj.user_id}",
         "email": "do not do this",
         "exp": datetime.utcnow() + timedelta(seconds=expires)
     }, settings.secret_key, algorithm=settings.algo)

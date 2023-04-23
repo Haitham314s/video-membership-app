@@ -1,6 +1,35 @@
-from pydantic import BaseModel, EmailStr, SecretStr, validator
+from pydantic import (
+    BaseModel,
+    EmailStr,
+    SecretStr,
+    validator,
+    root_validator
+)
 
+from app.users.auth import authenticate, login
 from app.users.models import User
+
+
+class UserLoginSchema(BaseModel):
+    email: EmailStr
+    password: SecretStr
+    session_id: str = None
+
+    @root_validator
+    def validate_user(cls, values):
+        err_msg = "Incorrect credentials, please try again."
+        email = values.get("email") or None
+        password = values.get("password") or None
+        if email is None or password is None:
+            raise ValueError(err_msg)
+
+        password = password.get_secret_value()
+        user_obj = authenticate(email, password)
+        if user_obj is None:
+            raise ValueError(err_msg)
+
+        token = login(user_obj)
+        return {"session_id": token}
 
 
 class UserSignupSchema(BaseModel):
@@ -23,8 +52,3 @@ class UserSignupSchema(BaseModel):
             raise ValueError("Password do not match")
 
         return v
-
-
-class UserLoginSchema(BaseModel):
-    email: EmailStr
-    password: SecretStr

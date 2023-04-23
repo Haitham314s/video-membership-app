@@ -35,7 +35,10 @@ def homepage(request: Request):
 
 @app.get("/login", response_class=HTMLResponse)
 def login_get_view(request: Request):
-    return render(request, "auth/login.html")
+    session_id = request.cookies.get("session_id") or None
+    return render(request, "auth/login.html", {
+        "logged_in": session_id is not None
+    })
 
 
 @app.post("/login")
@@ -56,7 +59,7 @@ def login_post_view(
     if len(errors) > 0:
         return render(request, "auth/login.html", context, status=400)
 
-    return render(request, "auth/login.html", context)
+    return render(request, "auth/login.html", {"logged_in": True}, cookies=data)
 
 
 @app.get("/signup", response_class=HTMLResponse)
