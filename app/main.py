@@ -8,7 +8,7 @@ from fastapi.templating import Jinja2Templates
 from pydantic import ValidationError
 
 from app.users.models import User
-from . import config, db
+from . import config, db, utils
 from .users.schemas import UserSignupSchema, UserLoginSchema
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent
@@ -51,11 +51,17 @@ def login_post_view(
         email: str = Form(...),
         password: str = Form(...)
 ):
-    cleaned_data = UserLoginSchema(
-        email=email,
-        password=password
-    )
-    return templates.TemplateResponse("auth/login.html")
+    raw_data = {
+        "email": email,
+        "password": password,
+    }
+    data, errors = utils.valid_schema_data_or_error(raw_data, UserLoginSchema)
+
+    return templates.TemplateResponse("auth/login.html", {
+        "request": request,
+        "data": data,
+        "errors": errors,
+    })
 
 
 @app.get("/signup", response_class=HTMLResponse)
@@ -73,33 +79,18 @@ def signup_post_view(
         password: str = Form(...),
         password_confirm: str = Form(...)
 ):
-    data = {}
-    errors = []
-    error_str = ""
-    context = {
+    raw_data = {
+        "email": email,
+        "password": password,
+        "password_confirm": password_confirm,
+    }
+    data, errors = utils.valid_schema_data_or_error(raw_data, UserSignupSchema)
+
+    return templates.TemplateResponse("auth/signup.html", {
         "request": request,
         "data": data,
         "errors": errors,
-    }
-
-    try:
-        cleaned_data = UserSignupSchema(
-            email=email,
-            password=password,
-            password_confirm=password_confirm
-        )
-        data = cleaned_data.dict()
-    except ValidationError as e:
-        error_str = e.json()
-
-    try:
-        errors = json.loads(error_str)
-    except Exception as e:
-        errors = [{"loc": "non_field_error", "msg": "Unknown"}]
-
-    print(cleaned_data.dict())
-
-    return templates.TemplateResponse("auth/signup.html", context)
+    })
 
 
 @app.get("/users")
