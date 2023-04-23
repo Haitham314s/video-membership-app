@@ -1,7 +1,7 @@
 import pathlib
 
 from cassandra.cqlengine.management import sync_table
-from fastapi import FastAPI, Request, Form
+from fastapi import FastAPI, Request, Form, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
@@ -9,6 +9,7 @@ from app.users.models import User
 from . import config, db, utils
 from .shortcuts import render, redirect
 from .users.schemas import UserSignupSchema, UserLoginSchema
+from .users.decorators import login_required
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent
 TEMPLATE_DIR = BASE_DIR / "templates"
@@ -31,6 +32,12 @@ def on_startup():
 @app.get("/", response_class=HTMLResponse)
 def homepage(request: Request):
     return render(request, "home.html")
+
+
+@app.get("/account", response_class=HTMLResponse)
+@login_required
+def account_view(request: Request):
+    return render(request, "account.html")
 
 
 @app.get("/login", response_class=HTMLResponse)
