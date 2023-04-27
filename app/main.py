@@ -4,7 +4,10 @@ from cassandra.cqlengine.management import sync_table
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from starlette.middleware.authentication import AuthenticationMiddleware
+from starlette.authentication import requires
 
+from app.users.backends import JWTCookieBackend
 from app.users.models import User
 from app import config, db, utils
 from app.shortcuts import render, redirect
@@ -16,6 +19,7 @@ BASE_DIR = pathlib.Path(__file__).resolve().parent
 TEMPLATE_DIR = BASE_DIR / "templates"
 
 app = FastAPI()
+app.add_middleware(AuthenticationMiddleware, backend=JWTCookieBackend())
 templates = Jinja2Templates(directory=str(TEMPLATE_DIR))
 
 DB_SESSION = None
@@ -32,6 +36,9 @@ def on_startup():
 
 @app.get("/", response_class=HTMLResponse)
 def homepage(request: Request):
+    if request.user.is_authenticated:
+        return render(request, "dashboard.html", {}, status_code=200)
+
     return render(request, "home.html")
 
 
