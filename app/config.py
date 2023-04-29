@@ -1,6 +1,7 @@
 import os
-from pathlib import Path
 from functools import lru_cache
+from pathlib import Path
+
 from pydantic import BaseSettings, Field
 
 os.environ["CQLENG_ALLOW_SCHEMA_MANAGEMENT"] = "1"

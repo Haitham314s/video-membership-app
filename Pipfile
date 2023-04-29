@@ -4,8 +4,19 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+fastapi = "*"
+uvicorn = "*"
+cassandra-driver = "*"
+python-dotenv = "*"
+email-validator = "*"
+argon2-cffi = "*"
+pytest = "*"
+jinja2 = "*"
+python-multipart = "*"
+python-jose = {extras = ["cryptography"], version = "*"}
 
 [dev-packages]
+jupyter = "*"
 
 [requires]
 python_version = "3.11"

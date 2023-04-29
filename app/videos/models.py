@@ -1,14 +1,14 @@
 from uuid import uuid1
-from app.config import get_settings
-from app.users.models import User
-from app.users.exceptions import InvalidUserIDException
-from .exceptions import (
-    InvalidYoutubeVideoURLException, VideoAlreadyAddedException
-)
 
 from cassandra.cqlengine import columns
 from cassandra.cqlengine.models import Model
 
+from app.config import get_settings
+from app.users.exceptions import InvalidUserIDException
+from app.users.models import User
+from .exceptions import (
+    InvalidYoutubeVideoURLException, VideoAlreadyAddedException
+)
 from .extractors import extract_video_id
 
 settings = get_settings()

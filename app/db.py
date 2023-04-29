@@ -1,6 +1,7 @@
 import pathlib
-from cassandra.cluster import Cluster
+
 from cassandra.auth import PlainTextAuthProvider
+from cassandra.cluster import Cluster
 from cassandra.cqlengine import connection
 
 from . import config

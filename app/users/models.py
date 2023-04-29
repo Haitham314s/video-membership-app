@@ -1,13 +1,14 @@
 from uuid import uuid1
+
+from cassandra.cqlengine import columns
+from cassandra.cqlengine.models import Model
+
 from app.config import get_settings
 from . import validators, security
 from .exceptions import (
     UserHasAccountException,
     InvalidEmailException,
 )
-
-from cassandra.cqlengine import columns
-from cassandra.cqlengine.models import Model
 
 settings = get_settings()
 

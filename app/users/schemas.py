@@ -6,8 +6,8 @@ from pydantic import (
     root_validator
 )
 
-from app.users.auth import authenticate, login
-from app.users.models import User
+from .auth import authenticate, login
+from .models import User
 
 
 class UserLoginSchema(BaseModel):

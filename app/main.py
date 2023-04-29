@@ -3,15 +3,17 @@ from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
 from starlette.middleware.authentication import AuthenticationMiddleware
 
-from .users.backends import JWTCookieBackend
-from .users.models import User
 from . import db, utils
-from .users.schemas import UserSignupSchema, UserLoginSchema
+from .shortcuts import redirect, render
+from .users.backends import JWTCookieBackend
 from .users.decorators import login_required
-from .handlers import *  # noqa
-
-from videos.models import Video
-from videos.routers import router as video_router
+from .users.models import User
+from .users.schemas import (
+    UserLoginSchema,
+    UserSignupSchema
+)
+from .videos.models import Video
+from .videos.routers import router as video_router
 
 DB_SESSION = None
 

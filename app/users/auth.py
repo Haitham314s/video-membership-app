@@ -1,9 +1,10 @@
 import secrets
 from datetime import datetime, timedelta, timezone
+
 from jose import jwt, ExpiredSignatureError
 
-from .models import User
 from app.config import get_settings
+from .models import User
 
 secret_key = secrets.token_urlsafe(50)
 algo = "HS256"

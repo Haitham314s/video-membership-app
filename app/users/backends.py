@@ -6,7 +6,6 @@ from starlette.authentication import (
 )
 
 from . import auth
-from .models import User
 
 
 class JWTCookieBackend(AuthenticationBackend):
@@ -18,6 +17,5 @@ class JWTCookieBackend(AuthenticationBackend):
             return AuthCredentials(roles), UnauthenticatedUser()
 
         user_id = user_data.get("user_id")
-        User.objects.get(user_id=user_id)
-        roles = ["authenticated"]
+        roles = ['authenticated']
         return AuthCredentials(roles), SimpleUser(user_id)
