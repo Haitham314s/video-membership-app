@@ -13,10 +13,10 @@ settings = get_settings()
 templates = Jinja2Templates(directory=str(settings.templates_dir))
 
 
-def get_object_or_404(ClassName, **kwargs):
+def get_object_or_404(KlassName, **kwargs):
     obj = None
     try:
-        obj = ClassName.objects.get(**kwargs)
+        obj = KlassName.objects.get(**kwargs)
     except DoesNotExist:
         raise StarletteHTTPException(status_code=404)
     except MultipleObjectsReturned:

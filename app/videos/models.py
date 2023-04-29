@@ -31,7 +31,7 @@ class Video(Model):
         return f"Video(title={self.title}, host_id={self.host_id}, host_service={self.host_service})"
 
     def render(self):
-        basename = self.host_service
+        basename = self.host_service  # youtube, vimeo
         template_name = f"videos/renderers/{basename}.html"
         context = {"host_id": self.host_id}
         t = templates.get_template(template_name)
