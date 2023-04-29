@@ -1,6 +1,6 @@
 from functools import wraps
 from fastapi import Request
-from app.users.exceptions import LoginRequiredException
+from .exceptions import LoginRequiredException
 
 
 def login_required(func):

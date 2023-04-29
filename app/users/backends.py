@@ -5,7 +5,8 @@ from starlette.authentication import (
     AuthCredentials
 )
 
-from app.users import auth
+from . import auth
+from .models import User
 
 
 class JWTCookieBackend(AuthenticationBackend):
