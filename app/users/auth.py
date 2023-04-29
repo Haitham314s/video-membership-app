@@ -20,7 +20,7 @@ def authenticate(email, password):
     return user_obj if user_obj.verify_password(password) else None
 
 
-def login(user_obj, expires=5):
+def login(user_obj, expires=settings.session_duration):
     return jwt.encode(
         {
             "user_id": f"{user_obj.user_id}",
