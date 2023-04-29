@@ -5,15 +5,14 @@ from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.authentication import AuthenticationMiddleware
-from starlette.authentication import requires
 
 from app.users.backends import JWTCookieBackend
 from app.users.models import User
 from app import config, db, utils
-from app.shortcuts import render, redirect
 from app.users.schemas import UserSignupSchema, UserLoginSchema
 from app.users.decorators import login_required
 from app.handlers import *  # noqa
+from videos.models import Video
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent
 TEMPLATE_DIR = BASE_DIR / "templates"
@@ -32,6 +31,7 @@ def on_startup():
     global DB_SESSION
     DB_SESSION = db.get_session()
     sync_table(User)
+    sync_table(Video)
 
 
 @app.get("/", response_class=HTMLResponse)
