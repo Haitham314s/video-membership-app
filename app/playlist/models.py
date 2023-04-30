@@ -5,6 +5,7 @@ from cassandra.cqlengine import columns
 from cassandra.cqlengine.models import Model
 
 from app.config import get_settings
+from app.videos.models import Video
 
 from datetime import timezone
 
@@ -18,4 +19,34 @@ class Playlist(Model):
     updated = columns.DateTime(default=datetime.now(timezone.utc))
     host_ids = columns.List(value_type=columns.Text)
     title = columns.Text()
-   
+
+    @property
+    def path(self):
+        return f"/playlists/{self.db_id}"
+
+    def add_host_ids(self, host_ids=None, replace_all=True):
+        if host_ids is None:
+            host_ids = []
+        if not isinstance(host_ids, list):
+            return False
+        if replace_all:
+            self.host_ids = host_ids
+        else:
+            self.host_ids += host_ids
+
+        self.updated = datetime.utcnow()
+        self.save()
+        return True
+
+    def get_videos(self):
+        videos = []
+        for host_id in self.host_ids:
+            try:
+                video_obj = Video.objects.get(host_id=host_id)
+            except:
+                video_obj = None
+
+            if video_obj is not None:
+                videos.append(video_obj)
+
+        return videos
