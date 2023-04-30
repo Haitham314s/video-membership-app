@@ -105,3 +105,10 @@ def signup_post_view(
 @app.get("/users")
 def user_list_view():
     return list(User.objects.all().limit(10))
+
+
+@app.post("/watch-event")
+def watch_event_view(request: Request, data: dict):
+    print(f"Data: {data}")
+    print(f"Is authenticated: {request.user.is_authenticated}")
+    return {"working": True}

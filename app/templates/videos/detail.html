@@ -15,7 +15,7 @@
     var youtubeVideoDiv = document.getElementById('yt-video')
 
     if (youtubeVideoDiv) {
-        var videoId = document.getAttribute("data-video-id")
+        var videoId = youtubeVideoDiv.getAttribute("data-video-id")
         var defaultStartTime = 0;
         var initialStartTime = parseInt(youtubeVideoDiv.getAttribute("data-start-time")) || defaultStartTime;
 
@@ -95,8 +95,20 @@
 
         timeSinceLastSaved = 0;
         console.log('saving...', data)
-    }
 
+        // send POST data
+        var reqOptions = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        }
+        fetch("/watch-event", reqOptions)
+            .then(response => response.json())
+            .then(data => console.log("success =>", data))
+            catch(error => console.error("error =>", error))
+    }
 </script>
 
 {% endblock %}
