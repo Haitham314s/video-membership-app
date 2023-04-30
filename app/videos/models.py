@@ -4,9 +4,9 @@ from cassandra.cqlengine import columns
 from cassandra.cqlengine.models import Model
 
 from app.config import get_settings
+from app.shortcuts import templates
 from app.users.exceptions import InvalidUserIDException
 from app.users.models import User
-from app.shortcuts import templates
 from .exceptions import (
     InvalidYoutubeVideoURLException, VideoAlreadyAddedException
 )

@@ -2,7 +2,6 @@ from cassandra.cqlengine.query import (
     DoesNotExist,
     MultipleObjectsReturned
 )
-
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from starlette.exceptions import HTTPException as StarletteHTTPException

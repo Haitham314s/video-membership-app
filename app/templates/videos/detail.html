@@ -28,6 +28,8 @@
         var timeSinceLastSaved = 0;
         var timeIntervalForSave = 5000;
 
+        var watchEventEndpoint = "/api/events/watch"
+
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('yt-video', {
                 height: '390',
@@ -55,7 +57,7 @@
 
     function monitorCurrentPlayback() {
         currentTime = player.getCurrentTime()
-        console.log('currentTime', currentTime)
+        // console.log('currentTime', currentTime)
         timeSinceLastSaved += monitorTimeInterval
 
         if (isPlaying) {
@@ -68,17 +70,17 @@
 
     function onPlayerStateChange(event) {
         if (event.data === YT.PlayerState.PLAYING) {
-            console.log("is playing")
+            // console.log("is playing")
             isPlaying = true
             monitorCurrentPlayback()
         } else if (event.data === YT.PlayerState.PAUSED) {
-            console.log("is paused")
+            // console.log("is paused")
             isPlaying = false
             clearTimeout(monitorTimeOut)
             monitorCurrentPlayback()
             storeWatchEvent()
         } else if (event.data === YT.PlayerState.ENDED) {
-            console.log("is ended")
+            // console.log("is ended")
             isPlaying = false
 
             clearTimeout(monitorTimeOut)
@@ -99,7 +101,7 @@
         }
 
         timeSinceLastSaved = 0;
-        console.log('saving...', data)
+        // console.log('saving...', data)
 
         // send POST data
         var reqOptions = {
@@ -109,10 +111,10 @@
             },
             body: JSON.stringify(data)
         }
-        fetch("/watch-event", reqOptions)
+        fetch(watchEventEndpoint, reqOptions)
             .then(response => response.json())
-            .then(data => console.log("success =>", data))
-            .catch(error => console.error("error =>", error))
+            // .then(data => console.log("success =>", data))
+            // .catch(error => console.error("error =>", error))
     }
 </script>
 

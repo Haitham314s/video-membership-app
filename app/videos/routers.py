@@ -1,5 +1,3 @@
-import logging
-
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import HTMLResponse
 
