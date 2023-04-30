@@ -1,13 +1,12 @@
 from fastapi import APIRouter, Request
 
-from main import app
 from .models import WatchEvent
 from .schemas import WatchEventSchema
 
 router = APIRouter()
 
 
-@app.post("/api/events/watch", response_model=WatchEventSchema)
+@router.post("/api/events/watch", response_model=WatchEventSchema)
 def watch_event_view(request: Request, watch_event: WatchEventSchema):
     cleaned_data = watch_event.dict()
     data = cleaned_data.copy()

@@ -18,3 +18,17 @@ class WatchEvent(Model):
     end_time = columns.Double()
     duration = columns.Double()
     complete = columns.Boolean(default=False)
+
+    @property
+    def completed(self):
+        return (self.duration * 0.97) < self.end_time
+
+    @staticmethod
+    def get_resume_time(host_id, user_id):
+        obj = WatchEvent.objects.allow_filtering().filter(host_id=host_id, user_id=user_id).first()
+
+        return (
+            obj.end_time
+            if obj is not None and not obj.complete or not obj.completed
+            else 0
+        )

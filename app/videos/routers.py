@@ -5,6 +5,7 @@ from app.shortcuts import render, redirect, get_object_or_404
 from app.users.decorators import login_required
 from app.utils import valid_schema_data_or_error
 from app.videos.schemas import VideoCreateSchema
+from app.watch_events.models import WatchEvent
 from .models import Video
 
 router = APIRouter(
@@ -60,9 +61,14 @@ def video_detail_view(request: Request):
 @router.get("/{host_id}", response_class=HTMLResponse)
 def video_detail_view(request: Request, host_id: str):
     obj = get_object_or_404(Video, host_id=host_id)
-    print(f"OBJECT: {obj}")
+    start_time = 0
+    if request.user.is_authenticated:
+        user_id = request.user.username
+        start_time = WatchEvent.get_resume_time(host_id, user_id)
+
     context = {
         "host_id": host_id,
+        "start_time": start_time,
         "object": obj
     }
 
