@@ -16,7 +16,7 @@ from .videos.models import Video
 from .videos.routers import router as video_router
 from .watch_events.models import WatchEvent
 from .watch_events.routers import router as watch_event_router
-from .playlist.routers import router as playlist_router
+from .playlists.routers import router as playlist_router
 
 DB_SESSION = None
 

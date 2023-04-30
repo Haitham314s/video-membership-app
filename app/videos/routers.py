@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request, Form
+from fastapi import APIRouter, Request, Form, Depends
 from fastapi.responses import HTMLResponse
 
 from app.shortcuts import render, redirect, get_object_or_404
@@ -13,6 +13,10 @@ router = APIRouter(
 )
 
 
+def is_htmx(request: Request):
+    return request.headers.get("hx-request") == "true"
+
+
 @router.get("/", response_class=HTMLResponse)
 @login_required
 def video_list_view(request: Request):
@@ -23,7 +27,10 @@ def video_list_view(request: Request):
 
 @router.get("/create", response_class=HTMLResponse)
 @login_required
-def video_create_view(request: Request):
+def video_create_view(request: Request, is_htmx=Depends(is_htmx)):
+    if is_htmx:
+        return render(request, "videos/htmx/create.html")
+
     return render(request, "videos/create.html")
 
 
