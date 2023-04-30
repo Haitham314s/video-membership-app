@@ -107,7 +107,7 @@
         fetch("/watch-event", reqOptions)
             .then(response => response.json())
             .then(data => console.log("success =>", data))
-            catch(error => console.error("error =>", error))
+            .catch(error => console.error("error =>", error))
     }
 </script>
 

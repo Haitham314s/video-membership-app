@@ -14,7 +14,7 @@ from .users.schemas import (
 )
 from .videos.models import Video
 from .videos.routers import router as video_router
-from watch_events.models import WatchEvent
+from app.watch_events.models import WatchEvent
 
 DB_SESSION = None
 
@@ -30,6 +30,7 @@ def on_startup():
     DB_SESSION = db.get_session()
     sync_table(User)
     sync_table(Video)
+    sync_table(WatchEvent)
 
 
 @app.get("/", response_class=HTMLResponse)
