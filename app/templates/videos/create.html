@@ -3,19 +3,6 @@
 {% block content %}
 <h1>Add video</h1>
 
-{% include "snippets/form_errors.html" %}
+{% include "videos/htmx/create.html" %}
 
-<form method="post">
-    <div>
-        <label for="title">Title</label>
-        <input id="title" type="text" name="title" placeholder="Your title" value="{{ title|e }}" />
-    </div>
-
-    <div>
-        <label for="url">Youtube Link</label>
-        <input id="url" type="text" name="url" placeholder="https://youtube.com/watch?v=" value="{{ url|e }}" />
-    </div>
-
-    <button type="submit">Add video</button>
-</form>
 {% endblock %}

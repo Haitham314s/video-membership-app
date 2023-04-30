@@ -1,8 +1,10 @@
 <div>
+    {% include "snippets/form_errors.html" %}
+
     <form method="post">
         <div>
             <label for="title">Title</label>
-            <input id="title" type="text" name="title" placeholder="Your title" value="{{ title|e }}" />
+            <input id="title" type="text" name="title" placeholder="Your title" value="{{ title|e }}" required="required" />
         </div>
 
         <div>
