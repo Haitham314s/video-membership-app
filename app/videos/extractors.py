@@ -10,7 +10,9 @@ def extract_video_id(url):
             return parse_qs(query.query)["v"][0]
         if query.path[:7] == "/watch/":
             return query.path.split("/")[1]
-        if query.path[:7] == "/embed":
+        if query.path[:7] == "/embed/":
+            return query.path.split("/")[2]
+        if query.path[:3] == "/v/":
             return query.path.split("/")[2]
 
     return None

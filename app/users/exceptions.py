@@ -5,13 +5,17 @@ class LoginRequiredException(HTTPException):
     pass
 
 
+# class LoginRequiredException(Exception):
+#     pass
+
+
 class UserHasAccountException(Exception):
-    """User already has an account."""
+    """User already has account."""
 
 
 class InvalidEmailException(Exception):
-    """Invalid user email"""
+    """Invalid email"""
 
 
-class InvalidUserIDException(HTTPException):
-    pass
+class InvalidUserIDException(Exception):
+    """Invalid user id"""

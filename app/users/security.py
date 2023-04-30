@@ -14,11 +14,11 @@ def verify_hash(pw_hash, pw_raw):
 
     try:
         verified = ph.verify(pw_hash, pw_raw)
-    except VerifyMismatchError as e:
+    except VerifyMismatchError:
         verified = False
         msg = "Invalid password."
     except Exception as e:
         verified = False
         msg = f"Unexpected error: \n{e}"
-
+        
     return verified, msg

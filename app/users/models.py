@@ -4,11 +4,7 @@ from cassandra.cqlengine import columns
 from cassandra.cqlengine.models import Model
 
 from app.config import get_settings
-from . import validators, security
-from .exceptions import (
-    UserHasAccountException,
-    InvalidEmailException,
-)
+from . import exceptions, security, validators
 
 settings = get_settings()
 
@@ -36,17 +32,18 @@ class User(Model):
     def verify_password(self, pw_str):
         pw_hash = self.password
         verified, _ = security.verify_hash(pw_hash, pw_str)
+
         return verified
 
     @staticmethod
     def create_user(email, password=None):
         q = User.objects.filter(email=email)
         if q.count() != 0:
-            raise UserHasAccountException("User already has an account")
+            raise exceptions.UserHasAccountException("User already has account.")
 
         valid, msg, email = validators._validate_email(email)
         if not valid:
-            raise InvalidEmailException(f"Invalid email: {msg}")
+            raise exceptions.InvalidEmailException(f"Invalid email: {msg}")
 
         obj = User(email=email)
         obj.set_password(password)

@@ -1,4 +1,4 @@
-from uuid import uuid1
+import uuid
 
 from cassandra.cqlengine import columns
 from cassandra.cqlengine.models import Model
@@ -7,18 +7,20 @@ from app.config import get_settings
 from app.shortcuts import templates
 from app.users.exceptions import InvalidUserIDException
 from app.users.models import User
-from .exceptions import (
-    InvalidYoutubeVideoURLException, VideoAlreadyAddedException
-)
-from .extractors import extract_video_id
 
 settings = get_settings()
+
+from .exceptions import (
+    InvalidYouTubeVideoURLException,
+    VideoAlreadyAddedException
+)
+from .extractors import extract_video_id
 
 
 class Video(Model):
     __keyspace__ = settings.keyspace
     host_id = columns.Text(primary_key=True)
-    db_id = columns.UUID(primary_key=True, default=uuid1)
+    db_id = columns.UUID(primary_key=True, default=uuid.uuid1)
     host_service = columns.Text(default="youtube")
     title = columns.Text()
     url = columns.Text()
@@ -48,11 +50,11 @@ class Video(Model):
     def add_video(url, user_id=None, **kwargs):
         host_id = extract_video_id(url)
         if host_id is None:
-            raise InvalidYoutubeVideoURLException("Invalid youtube video url")
+            raise InvalidYouTubeVideoURLException("Invalid YouTube Video URL")
 
         user_exists = User.check_exists(user_id)
         if user_exists is None:
-            raise InvalidUserIDException("Invalid user id")
+            raise InvalidUserIDException("Invalid user_id")
 
         # user_obj = User.by_user_id(user_id)
         # user_obj.display_name

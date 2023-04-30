@@ -1,22 +1,21 @@
 from datetime import datetime
+from datetime import timezone
 from uuid import uuid1
 
 from cassandra.cqlengine import columns
 from cassandra.cqlengine.models import Model
 
-from app.config import get_settings
+from app import config
 from app.videos.models import Video
 
-from datetime import timezone
-
-settings = get_settings()
+settings = config.get_settings()
 
 
 class Playlist(Model):
     __keyspace__ = settings.keyspace
     db_id = columns.UUID(primary_key=True, default=uuid1)
     user_id = columns.UUID()
-    updated = columns.DateTime(default=datetime.now(timezone.utc))
+    updated = columns.DateTime(default=datetime.utcnow())
     host_ids = columns.List(value_type=columns.Text)
     title = columns.Text()
 
@@ -24,9 +23,10 @@ class Playlist(Model):
     def path(self):
         return f"/playlists/{self.db_id}"
 
-    def add_host_ids(self, host_ids=None, replace_all=True):
+    def add_host_ids(self, host_ids=None, replace_all=False):
         if host_ids is None:
             host_ids = []
+
         if not isinstance(host_ids, list):
             return False
         if replace_all:
@@ -34,8 +34,9 @@ class Playlist(Model):
         else:
             self.host_ids += host_ids
 
-        self.updated = datetime.utcnow()
+        self.updated = datetime.now(timezone.utc)
         self.save()
+
         return True
 
     def get_videos(self):

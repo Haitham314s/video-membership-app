@@ -29,6 +29,6 @@ class WatchEvent(Model):
 
         return (
             obj.end_time
-            if obj is not None and not obj.complete or not obj.completed
+            if obj is not None and (not obj.complete or not obj.completed)
             else 0
         )

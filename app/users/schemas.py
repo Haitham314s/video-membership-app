@@ -6,7 +6,7 @@ from pydantic import (
     root_validator
 )
 
-from .auth import authenticate, login
+from . import auth
 from .models import User
 
 
@@ -24,11 +24,12 @@ class UserLoginSchema(BaseModel):
             raise ValueError(err_msg)
 
         password = password.get_secret_value()
-        user_obj = authenticate(email, password)
+        user_obj = auth.authenticate(email, password)
         if user_obj is None:
             raise ValueError(err_msg)
 
-        token = login(user_obj)
+        token = auth.login(user_obj)
+
         return {"session_id": token}
 
 
@@ -42,13 +43,14 @@ class UserSignupSchema(BaseModel):
         q = User.objects.filter(email=v)
         if q.count() != 0:
             raise ValueError("Email is not available")
+
         return v
 
     @validator("password_confirm")
-    def password_match(cls, v, values, **kwargs):
-        password = values.get("password")
+    def passwords_match(cls, v, values, **kwargs):
+        password = values.get('password')
         password_confirm = v
         if password != password_confirm:
-            raise ValueError("Password do not match")
-
+            raise ValueError("Passwords do not match")
+        
         return v

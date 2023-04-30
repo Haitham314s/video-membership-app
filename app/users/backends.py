@@ -18,4 +18,5 @@ class JWTCookieBackend(AuthenticationBackend):
 
         user_id = user_data.get("user_id")
         roles = ['authenticated']
+        
         return AuthCredentials(roles), SimpleUser(user_id)
