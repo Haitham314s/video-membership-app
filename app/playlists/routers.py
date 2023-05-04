@@ -9,7 +9,7 @@ from app.shortcuts import (render, redirect, get_object_or_404, is_htmx)
 from app.users.decorators import login_required
 from app.videos.schemas import VideoCreateSchema
 from .models import Playlist
-from .schemas import PlaylistCreateSchema
+from .schemas import PlaylistCreateSchema, PlaylistVideoAddSchema
 
 router = APIRouter(
     prefix='/playlists'
@@ -95,9 +95,10 @@ def playlist_video_add_post_view(
     raw_data = {
         "title": title,
         "url": url,
-        "user_id": request.user.username
+        "user_id": request.user.username,
+        "playlist_id": db_id
     }
-    data, errors = utils.valid_schema_data_or_error(raw_data, VideoCreateSchema)
+    data, errors = utils.valid_schema_data_or_error(raw_data, PlaylistVideoAddSchema)
     redirect_path = data.get('path') or f"/playlists/{db_id}"
 
     context = {
