@@ -1,3 +1,4 @@
+from typing import Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Request, Form, Depends
@@ -119,3 +120,30 @@ def playlist_video_add_post_view(
         return render(request, "playlists/htmx/add-video.html", context)
     context = {"path": redirect_path, "title": data.get('title')}
     return render(request, "videos/htmx/link.html", context)
+
+
+@router.get("/{db_id}/{host_id}/delete", response_class=HTMLResponse)
+def playlist_remove_video_item_view(
+        request: Request,
+        db_id: UUID,
+        host_id: str,
+        ishtmx=Depends(is_htmx),
+        index: Optional[int] = Form(default=None)
+):
+    if not ishtmx:
+        raise HTTPException(status_code=400)
+
+    try:
+        obj = get_object_or_404(Playlist, db_id=db_id)
+    except HTTPException:
+        return HTMLResponse("Error. Please reload the page.")
+
+    if not request.user.is_authenticated:
+        return HTMLResponse("Please login and continue.")
+    if isinstance(index, int):
+        host_ids = obj.host_ids
+        host_ids.pop(index)
+        obj.add_host_ids(host_ids, replace_all=True)
+
+    print(f"DB id: {db_id}, Host id: {host_id}")
+    return HTMLResponse("Deleted")
