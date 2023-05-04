@@ -2,6 +2,7 @@ import uuid
 
 from cassandra.cqlengine import columns
 from cassandra.cqlengine.models import Model
+from cassandra.cqlengine.query import (DoesNotExist, MultipleObjectsReturned)
 
 from app.config import get_settings
 from app.shortcuts import templates
@@ -45,6 +46,25 @@ class Video(Model):
     @property
     def path(self):
         return f"/videos/{self.host_id}"
+
+    @staticmethod
+    def get_or_create(url, user_id=None, **kwargs):
+        host_id = extract_video_id(url)
+        obj = None
+        created = False
+
+        try:
+            obj = Video.objects.get(host_id=host_id)
+        except MultipleObjectsReturned:
+            q = Video.objects.allow_filtering().filter(host_id=host_id)
+            obj = q.first()
+        except DoesNotExist:
+            obj = Video.add_video(url, user_id=user_id, **kwargs)
+            created = True
+        except:
+            raise Exception("Invalid request")
+
+        return obj, created
 
     @staticmethod
     def add_video(url, user_id=None, **kwargs):
