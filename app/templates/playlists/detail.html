@@ -19,7 +19,7 @@
     {% endfor %}
 </div>
 
-<button hx-get="/playlist/{{ object.db_id }}/add-video"
+<button hx-get="/playlists/{{ object.db_id }}/add-video"
         hx-trigger="click"
         hx-target="#video-container"
         hx-swap="beforeend">

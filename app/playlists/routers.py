@@ -8,7 +8,6 @@ from starlette.exceptions import HTTPException
 from app import utils
 from app.shortcuts import (render, redirect, get_object_or_404, is_htmx)
 from app.users.decorators import login_required
-from app.videos.schemas import VideoCreateSchema
 from .models import Playlist
 from .schemas import PlaylistCreateSchema, PlaylistVideoAddSchema
 

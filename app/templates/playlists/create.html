@@ -5,10 +5,10 @@
 
 {% include "snippets/form_errors.html" %}
 
-<form method="post">
+<form method="post" action="/playlists/{{ object.db_id }}/add-video">
     <div>
         <label for="title">Title</label>
-        <input id="title" type="text" name="title" placeholder="Your title" value="{{ title|e }}" />
+        <input id="title" type="text" name="title" placeholder="Your title" {% if title %}value="{{ title }}"{% endif %} />
     </div>
 
     <button type="submit">Add Playlist</button>

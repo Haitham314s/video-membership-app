@@ -4,7 +4,7 @@
     <form method="post" action="/playlists/{{ db_id }}/add-video" hx-post="/playlists/{{ db_id }}/add-video">
         <div>
             <label for="title">Title</label>
-            <input id="title" type="text" name="title" placeholder="Your title" value="{{ title|e }}" required="required" />
+            <input id="title" type="text" name="title" placeholder="Your title" {% if title %}value="{{ title }}"{% endif %} required="required" />
         </div>
 
         <div>
