@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome | {{ super() }}{% endblock %}
+
+{% block content %}
+<div class="text-center col-md-4 col-sm-6 mx-auto">
+    <h3>
+        {% if num_hits %}
+        Found {{ num_hits }} results for {{ query }}
+        {% else %}
+        No results found for {{ query }}
+        {% endif %}
+    </h3>
+
+    {% if request.user.us_authenticated %}
+    <button hx-post="/update-index" class="btn btn-sm btn-outline-secondary mb-3">Refresh Search Index</button>
+    {% endif %}
+
+    {% include "search/search-form.html" %}
+
+    {% for hit in hits %}
+    <div class="list-group mt-3">
+        <a class="list-group-item list-group-item-action" href="{{ hit['path'] }}">
+            {{ hit['title'] }} <small class="text-muted">{{ hit.get("objectType") }}</small>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

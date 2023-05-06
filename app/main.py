@@ -6,6 +6,7 @@ from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
 from starlette.middleware.authentication import AuthenticationMiddleware
 
+from .indexing.client import search_index
 from . import db, utils
 from .playlists.routers import router as playlist_router
 from .users.backends import JWTCookieBackend
@@ -128,7 +129,30 @@ def signup_post_view(request: Request,
     return redirect("/login")
 
 
-@app.get("/users")
-def users_list_view():
-    q = User.objects.all().limit(10)
-    return list(q)
+@app.post("/update-index", response_class=HTMLResponse)
+def htmx_update_index_view(request: Request):
+    count = update_index()
+    return HTMLResponse(f"({count}) Refreshed")
+
+
+@app.get("/search", response_class=HTMLResponse)
+def search_detail_view(request: Request, q: Optional[str] = None):
+    query = None
+    context = {}
+
+    if q is not None:
+        query = q
+        context = {"query": query}
+        results = search_index(query)
+        hits = results.get("hits") or []
+        num_hits = results.get("nbHits")
+
+        context = {
+            "query": query,
+            "hits": hits,
+            "num_hits": num_hits
+        }
+
+        print(f"Results {results}")
+
+    return render(request, "search/detail.html", context)

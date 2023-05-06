@@ -36,7 +36,6 @@ def update_index():
     return count
 
 
-def search_index():
-    pass
+def search_index(query):
     index = get_index()
     return index.search(query)
