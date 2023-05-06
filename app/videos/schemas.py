@@ -63,3 +63,17 @@ class VideoCreateSchema(BaseModel):
         #     video_obj.save()
 
         return video_obj.as_data()
+
+
+class VideoEditSchema(BaseModel):
+    url: str
+    title: str
+
+    @validator("url")
+    def validate_youtube_url(cls, v, values, **kwargs):
+        url = v
+        video_id = extract_video_id(url)
+        if video_id is None:
+            raise ValueError(f"{url} is not a valid YouTube URL")
+
+        return url

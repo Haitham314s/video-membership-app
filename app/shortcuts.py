@@ -16,7 +16,6 @@ def is_htmx(request: Request):
 
 def get_object_or_404(KlassName, **kwargs):
     obj = None
-
     try:
         obj = KlassName.objects.get(**kwargs)
     except DoesNotExist as e:
@@ -25,6 +24,7 @@ def get_object_or_404(KlassName, **kwargs):
         raise StarletteHTTPException(status_code=400)
     except:
         raise StarletteHTTPException(status_code=500)
+
     return obj
 
 
