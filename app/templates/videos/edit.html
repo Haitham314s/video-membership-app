@@ -1,12 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% if object.title %}
-<h1>{% if object.title %}Edit {{ object.title }}{% else %}{{ object.host_id }}{% endif %}</h1>
-{% endif %}
+<div class="row">
+    <div class="col-md-3">
+        {% include "videos/sidebar.html" %}
+    </div>
 
-{% with video=object %}
-{% include "videos/htmx/edit.html" %}
-{% endwith %}
+    <div class="col-md-9">
+        {% if object.title %}
+        <h1>Edit Video</h1>
+        {% endif %}
 
+        {% with video=object %}
+        {% include "videos/htmx/edit.html" %}
+        {% endwith %}
+    </div>
+</div>
 {% endblock %}

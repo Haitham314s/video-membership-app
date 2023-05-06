@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-
 {% if object.title %}<h1>{{ object.title }}</h1>{% endif %}
-<p>{{ start_time }}</p>
+<div class="col-md-9">
+    <div>
+        <div id="yt-video" data-video-id="{{ host_id }}" data-start-time="{{ start_time }}"/>
+    </div>
 
-<div id="yt-video" data-video-id="{{ host_id }}" data-start-time="{{ start_time }}" />
-
-<div>
-    <code>{{ object.render() }}</code>
+    <div class="col-md-3">
+        <code>{{ object.render() }}</code>
+    </div>
 </div>
 
 <script>

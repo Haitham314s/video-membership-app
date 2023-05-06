@@ -1,17 +1,17 @@
-<div>
+<div class="my-2 border rounded p-3">
     {% include "snippets/form_errors.html" %}
 
     <form method="post" action="/playlists/{{ db_id }}/add-video" hx-post="/playlists/{{ db_id }}/add-video">
         <div>
             <label for="title">Title</label>
-            <input id="title" type="text" name="title" placeholder="Your title" {% if title %}value="{{ title }}"{% endif %} required="required" />
+            <input id="title" class="form-control" type="text" name="title" required="required" placeholder="Your title" {% if title %}value="{{ title }}"{% endif %} required="required" />
         </div>
 
         <div>
             <label for="url">Youtube Link</label>
-            <input id="url" type="text" name="url" placeholder="https://youtube.com/watch?v=" value="{{ url|e }}" />
+            <input id="url" class="form-control" type="text" name="url" required="required" placeholder="https://youtube.com/watch?v=" {% if url %}value="{{ url }}"{% endif %} />
         </div>
 
-        <button type="submit">Add video</button>
+        <button class="btn btn-primary mt-2" type="submit">Add video</button>
     </form>
 </div>

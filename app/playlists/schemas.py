@@ -8,7 +8,7 @@ from pydantic import (
 
 from app.videos.extractors import extract_video_id
 from app.videos.models import Video
-from app.playlists.models import Playlist
+from .models import Playlist
 
 
 class PlaylistCreateSchema(BaseModel):
@@ -29,13 +29,13 @@ class PlaylistVideoAddSchema(BaseModel):
         if video_id is None:
             raise ValueError(f"{url} is not a valid YouTube URL")
 
-        return
+        return url
 
     @validator("playlist_id")
     def validate_playlist_id(cls, v, values, **kwargs):
         q = Playlist.objects.filter(db_id=v)
         if q.count() == 0:
-            raise ValueError(f"{v} is not a valid Playlist ID")
+            raise ValueError(f"{v} is not a valid Playlist")
 
         return v
 
@@ -43,14 +43,14 @@ class PlaylistVideoAddSchema(BaseModel):
     def validate_data(cls, values):
         url = values.get("url")
         title = values.get("title")
-        playlist_id = values.get("playlist_id")
-
+        playlist_id = values.get('playlist_id')
         if url is None:
             raise ValueError("A valid url is required.")
 
         user_id = values.get("user_id")
         video_obj = None
         extra_data = {}
+
         if title is not None:
             extra_data['title'] = title
 
@@ -61,7 +61,7 @@ class PlaylistVideoAddSchema(BaseModel):
 
         if not isinstance(video_obj, Video):
             raise ValueError("There's a problem with your account, please try again.")
-        else:
+        if playlist_id:
             playlist_obj = Playlist.objects.get(db_id=playlist_id)
             playlist_obj.add_host_ids(host_ids=[video_obj.host_id])
             playlist_obj.save()

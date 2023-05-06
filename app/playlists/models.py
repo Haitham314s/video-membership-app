@@ -26,9 +26,9 @@ class Playlist(Model):
     def add_host_ids(self, host_ids=None, replace_all=False):
         if host_ids is None:
             host_ids = []
-
         if not isinstance(host_ids, list):
             return False
+
         if replace_all:
             self.host_ids = host_ids
         else:

@@ -1,4 +1,4 @@
-<div id="video-inline-edit-{{ object.host_id }}">
+<div id="video-inline-edit-{{ object.host_id }}" class="d-flex justify-content-between">
     <a href={{ object.path }}>
         {%- if not object.title -%}
         {{ object.host_id }}
@@ -8,6 +8,7 @@
     </a>
 
     <button
+            class="btn btn-sm btn-outline-secondary"
             hx-get="/videos/{{ object.host_id }}/hx-edit"
             hx-target="#video-inline-edit-{{ object.host_id }}"
     >

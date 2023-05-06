@@ -1,8 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Add video</h1>
+<div class="row">
+    <div class="col-md-3">
+        {% include "videos/sidebar.html" %}
+    </div>
 
-{% include "videos/htmx/create.html" %}
+    <div class="col-md-9">
+        <h1>Create video</h1>
 
+        {% include "videos/htmx/create.html" %}
+    </div>
+</div>
 {% endblock %}
