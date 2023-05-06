@@ -17,6 +17,10 @@ class Settings(BaseSettings):
     jwt_algorithm: str = Field(default="HS256")
     session_duration: int = Field(default=86400)
 
+    algolia_api_key: str = Field(...)
+    algolia_app_id: str = Field(...)
+    algolia_index_name: str = Field(...)
+
     class Config:
         env_file = ".env"
 
